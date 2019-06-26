@@ -1,8 +1,16 @@
 .login-form {
   display: flex;
   flex-direction: column;
+  width: 60vw;
+  margin: auto;
+  align-items: flex-end;
+  max-width: 600px;
 }
 
-.login-form>* {
+.login-form > * {
   width: 100%;
+}
+
+.login-form > button {
+  width: 30%;
 }
