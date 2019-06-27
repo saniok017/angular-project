@@ -6,14 +6,19 @@ import { StateService } from '../state.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss'],
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
-  email: FormControl = new FormControl('', [Validators.required, Validators.email]);
+  email: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.email
+  ]);
   password: FormControl = new FormControl('', [Validators.required]);
   hide: boolean = true;
   response: string;
   tooltipDisabled: string = 'true';
+  tooltipMessage: string;
+  lastrequest: object = {};
 
   getErrorMessage() {
     return this.email.hasError('required')
@@ -27,15 +32,18 @@ export class LoginComponent implements OnInit {
 
   async onSubmit(tooltip) {
     const payload = { emeil: this.email.value, password: this.password.value };
-    // TODO verify payload here
-    const responce = await this.stateService.verifyCredentials(payload);
 
-    if (responce === 'verified') {
+    if (!this.stateService.checkOnEquality(payload, this.lastrequest)) {
+      this.response = await this.stateService.verifyCredentials(payload);
+      this.lastrequest = payload;
+    }
+
+    if (this.response === 'verified') {
       this.email.reset();
       this.password.reset();
       return;
     } else {
-      this.response = `invalid credentials ${responce}`;
+      this.tooltipMessage = `invalid credentials ${this.response}`;
       this.tooltipDisabled = 'false';
       setTimeout(() => tooltip.hide(), 1000);
       setTimeout(() => tooltip.show());

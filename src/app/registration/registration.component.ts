@@ -6,10 +6,13 @@ import { StateService } from '../state.service';
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss'],
+  styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent implements OnInit {
-  email: FormControl = new FormControl('', [Validators.required, Validators.email]);
+  email: FormControl = new FormControl('', [
+    Validators.required,
+    Validators.email
+  ]);
   password: FormControl = new FormControl('', [Validators.required]);
   fname: FormControl = new FormControl('', [Validators.required]);
   lname: FormControl = new FormControl('', [Validators.required]);
@@ -17,6 +20,7 @@ export class RegistrationComponent implements OnInit {
   gender: FormControl = new FormControl('');
   hide: boolean = true;
   response: string;
+  tooltipMessage: string;
   tooltipDisabled: string = 'true';
   lastrequest: object = {};
 
@@ -30,17 +34,35 @@ export class RegistrationComponent implements OnInit {
       : '';
   }
 
+  showErrorTooltip(tooltip) {
+    this.tooltipDisabled = 'false';
+    setTimeout(() => tooltip.hide(), 1000);
+    setTimeout(() => tooltip.show());
+  }
+
   async register(tooltip) {
     const payload = {
-      emeil: this.email.value,
+      email: this.email.value,
       password: this.password.value,
       fname: this.fname.value,
       lname: this.lname.value,
       address: this.address.value,
-      gender: this.gender.value,
+      gender: this.gender.value
     };
-    // need to emplement deep search here
-    if (payload !== this.lastrequest) {
+    const requiered = [
+      payload.fname,
+      payload.lname,
+      payload.password,
+      payload.email
+    ];
+
+    if (requiered.some(field => field === '')) {
+      this.tooltipMessage = 'Feel all required fields please';
+      this.showErrorTooltip(tooltip);
+      return;
+    }
+
+    if (!this.stateService.checkOnEquality(payload, this.lastrequest)) {
       this.response = await this.stateService.registerNewUser(payload);
       this.lastrequest = payload;
     }
@@ -54,10 +76,8 @@ export class RegistrationComponent implements OnInit {
       this.gender.reset();
       return;
     } else {
-      this.response = `invalid credentials ${this.response}`;
-      this.tooltipDisabled = 'false';
-      setTimeout(() => tooltip.hide(), 1000);
-      setTimeout(() => tooltip.show());
+      this.tooltipMessage = `invalid credentials ${this.response}`;
+      this.showErrorTooltip(tooltip);
     }
   }
 
