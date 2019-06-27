@@ -2,22 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 import { StateService } from '../state.service';
-import { MAT_TOOLTIP_DEFAULT_OPTIONS, MatTooltipDefaultOptions } from '@angular/material/tooltip';
 
-export const myCustomTooltipDefaults: MatTooltipDefaultOptions = {
-  showDelay: 0,
-  hideDelay: 1000,
-  touchendHideDelay: 1000,
-};
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  providers: [{ provide: MAT_TOOLTIP_DEFAULT_OPTIONS, useValue: myCustomTooltipDefaults }],
 })
 export class LoginComponent implements OnInit {
   email: FormControl = new FormControl('', [Validators.required, Validators.email]);
-  password: FormControl = new FormControl('');
+  password: FormControl = new FormControl('', [Validators.required]);
   hide: boolean = true;
   response: string;
   tooltipDisabled: string = 'true';
@@ -32,17 +25,20 @@ export class LoginComponent implements OnInit {
 
   constructor(private stateService: StateService) {}
 
-  async onSubmit(userData: object, tooltip) {
-    const responce = await this.stateService.verifyCredentials(userData);
-    this.tooltipDisabled = 'false';
-    setTimeout(() => tooltip.hide(), 1000);
-    setTimeout(() => tooltip.show());
+  async onSubmit(tooltip) {
+    const payload = { emeil: this.email.value, password: this.password.value };
+    // TODO verify payload here
+    const responce = await this.stateService.verifyCredentials(payload);
+
     if (responce === 'verified') {
       this.email.reset();
       this.password.reset();
       return;
     } else {
-      this.response = responce;
+      this.response = `invalid credentials ${responce}`;
+      this.tooltipDisabled = 'false';
+      setTimeout(() => tooltip.hide(), 1000);
+      setTimeout(() => tooltip.show());
     }
   }
 

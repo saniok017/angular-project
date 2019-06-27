@@ -1,13 +1,8 @@
-<mat-toolbar color="primary">
-  <mat-toolbar-row>
-    <a class="home-link" href="/">HOME</a>
-    <span class="spacer"></span>
-    <a mat-button routerLink="/register">Register</a>
-    <a mat-button routerLink="/login">Login</a>
-  </mat-toolbar-row>
-</mat-toolbar>
+<app-top-bar></app-top-bar>
 <div style="text-align:center">
   <h1>Welcome to {{ title }}!</h1>
 </div>
 
-<router-outlet></router-outlet>
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
