@@ -8,6 +8,20 @@ body {
   height: 100%;
 }
 
+.window {
+  margin: auto;
+  min-width: 400px;
+  max-width: 80vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.small-window {
+  min-width: 200px;
+  max-width: 60vw;
+}
+
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
