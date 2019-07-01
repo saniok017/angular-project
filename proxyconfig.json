@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "http://mybackendrestapi.server",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

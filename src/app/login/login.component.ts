@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   ]);
   password: FormControl = new FormControl('', [Validators.required]);
   hide: boolean = true;
-  response: string;
+  response;
   tooltipDisabled: string = 'true';
   tooltipMessage: string;
   lastrequest: object = {};
@@ -33,17 +33,18 @@ export class LoginComponent implements OnInit {
   async onSubmit(tooltip) {
     const payload = { emeil: this.email.value, password: this.password.value };
 
+    // perform new request only with new data
     if (!this.stateService.checkOnEquality(payload, this.lastrequest)) {
       this.response = await this.stateService.verifyCredentials(payload);
       this.lastrequest = payload;
     }
 
-    if (this.response === 'verified') {
+    if (this.response.verified) {
       this.email.reset();
       this.password.reset();
       return;
     } else {
-      this.tooltipMessage = `invalid credentials ${this.response}`;
+      this.tooltipMessage = `invalid credentials ${this.response.error}`;
       this.tooltipDisabled = 'false';
       setTimeout(() => tooltip.hide(), 1000);
       setTimeout(() => tooltip.show());

@@ -18,8 +18,9 @@ export class RegistrationComponent implements OnInit {
   lname: FormControl = new FormControl('', [Validators.required]);
   address: FormControl = new FormControl('');
   gender: FormControl = new FormControl('');
+  picker: FormControl = new FormControl('');
   hide: boolean = true;
-  response: string;
+  response;
   tooltipMessage: string;
   tooltipDisabled: string = 'true';
   lastrequest: object = {};
@@ -47,7 +48,8 @@ export class RegistrationComponent implements OnInit {
       fname: this.fname.value,
       lname: this.lname.value,
       address: this.address.value,
-      gender: this.gender.value
+      gender: this.gender.value,
+      picker: this.picker.value
     };
     const requiered = [
       payload.fname,
@@ -62,12 +64,13 @@ export class RegistrationComponent implements OnInit {
       return;
     }
 
+    // perform new request only with new data
     if (!this.stateService.checkOnEquality(payload, this.lastrequest)) {
       this.response = await this.stateService.registerNewUser(payload);
       this.lastrequest = payload;
     }
 
-    if (this.response === 'verified') {
+    if (this.response.statusText === 'OK') {
       this.email.reset();
       this.password.reset();
       this.fname.reset();
@@ -76,7 +79,7 @@ export class RegistrationComponent implements OnInit {
       this.gender.reset();
       return;
     } else {
-      this.tooltipMessage = `invalid credentials ${this.response}`;
+      this.tooltipMessage = `Something went wrong ${this.response.error}`;
       this.showErrorTooltip(tooltip);
     }
   }
