@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators, FormBuilder } from '@angular/forms';
+import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 
 import { StateService } from '../state.service';
+import { PasswordValidator } from './validators/password.validator';
 
 @Component({
   selector: 'app-registration',
@@ -9,8 +10,29 @@ import { StateService } from '../state.service';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  email: FormControl = new FormControl('', [Validators.required, Validators.email]);
-  password: FormControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
+  email: FormControl = new FormControl(
+    '',
+    Validators.compose([Validators.required, Validators.email])
+  );
+  password: FormControl = new FormControl(
+    '',
+    Validators.compose([
+      Validators.minLength(5),
+      Validators.required,
+      //this is for the letters (both uppercase and lowercase) and numbers validation
+      Validators.pattern('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])[a-zA-Z0-9]+$'),
+    ])
+  );
+  confirmPassword: FormControl = new FormControl('', Validators.required);
+  matchingPasswordsGroup: FormGroup = new FormGroup(
+    {
+      password: this.password,
+      confirmPassword: this.confirmPassword,
+    },
+    (formGroup: FormGroup) => {
+      return PasswordValidator.areEqual(formGroup);
+    }
+  );
   fname: FormControl = new FormControl('', [Validators.required]);
   lname: FormControl = new FormControl('', [Validators.required]);
   address: FormControl = new FormControl('');
@@ -67,10 +89,22 @@ export class RegistrationComponent implements OnInit {
 
   async register(tooltip) {
     const payload = this.registrationForm.value;
-    const requiered = [payload.fname, payload.lname, payload.password, payload.email];
+    const requiered = [
+      payload.fname,
+      payload.lname,
+      payload.password,
+      payload.password,
+      payload.email,
+    ];
 
     if (requiered.some(field => field === '')) {
       this.tooltipMessage = 'Feel all required fields please';
+      this.showErrorTooltip(tooltip);
+      return;
+    }
+
+    if (this.matchingPasswordsGroup.invalid) {
+      this.tooltipMessage = 'Password must be 5 chars long with upper case and lower case letter';
       this.showErrorTooltip(tooltip);
       return;
     }
