@@ -4,27 +4,16 @@
   </mat-toolbar>
   <mat-card class="my-card">
     <mat-card-content>
-      <form class="my-form">
+      <form class="my-form" [formGroup]="registrationForm">
         <mat-form-field class="full-width">
           <mat-label>First Name</mat-label>
-          <input
-            matInput
-            appMyCustomAutoFocus
-            placeholder="First name"
-            [formControl]="fname"
-            required
-          />
-          <mat-error *ngIf="fname.invalid">{{ getErrorMessage() }}</mat-error>
+          <input matInput appMyCustomAutoFocus placeholder="First name" [formControl]="fname" required />
+          <mat-error *ngIf="fname.invalid">{{ getErrorMessage('fname') }}</mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Last Name</mat-label>
-          <input
-            matInput
-            placeholder="Last Name"
-            [formControl]="lname"
-            required
-          />
-          <mat-error *ngIf="lname.invalid">{{ getErrorMessage() }}</mat-error>
+          <input matInput placeholder="Last Name" [formControl]="lname" required />
+          <mat-error *ngIf="lname.invalid">{{ getErrorMessage('lname') }}</mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Address</mat-label>
@@ -33,59 +22,34 @@
         <mat-form-field class="full-width">
           <mat-label>Email</mat-label>
           <input matInput placeholder="Email" [formControl]="email" required />
-          <mat-error *ngIf="email.invalid">{{ getErrorMessage() }}</mat-error>
+          <mat-error *ngIf="email.invalid">{{ getErrorMessage('email') }}</mat-error>
         </mat-form-field>
         <mat-form-field class="full-width">
           <mat-label>Password</mat-label>
-          <input
-            matInput
-            placeholder="Password"
-            [formControl]="password"
-            required
-          />
+          <input matInput placeholder="Password" [formControl]="password" minlength="5" required />
           <mat-error *ngIf="password.invalid">{{
-            getErrorMessage()
+            getErrorMessage('password')
           }}</mat-error>
         </mat-form-field>
         <section class="gender-section">
           <label class="gender-margin">Gender:</label>
           <mat-radio-group [formControl]="gender">
-            <mat-radio-button class="example-margin" value="Male"
-              >Male</mat-radio-button
-            >
-            <mat-radio-button class="example-margin" value="Female"
-              >Female</mat-radio-button
-            >
-            <mat-radio-button class="example-margin" value="Other"
-              >Other</mat-radio-button
-            >
+            <mat-radio-button class="example-margin" value="Male">Male</mat-radio-button>
+            <mat-radio-button class="example-margin" value="Female">Female</mat-radio-button>
+            <mat-radio-button class="example-margin" value="Other">Other</mat-radio-button>
           </mat-radio-group>
         </section>
         <mat-form-field>
           <mat-label>Date of Birth</mat-label>
-          <input
-            matInput
-            [matDatepicker]="picker"
-            [formControl]="picker"
-            placeholder="Choose a date"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="picker"
-          ></mat-datepicker-toggle>
+          <input matInput [matDatepicker]="picker" [formControl]="picker" placeholder="Choose a date" />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </form>
     </mat-card-content>
     <mat-card-actions>
-      <button
-        mat-raised-button
-        #tooltip="matTooltip"
-        [matTooltip]="tooltipMessage"
-        [matTooltipDisabled]="tooltipDisabled"
-        (click)="register(tooltip)"
-        color="primary"
-      >
+      <button mat-raised-button #tooltip="matTooltip" [matTooltip]="tooltipMessage"
+        [matTooltipDisabled]="tooltipDisabled" (click)="register(tooltip)" color="primary">
         REGISTER
       </button>
     </mat-card-actions>

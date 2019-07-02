@@ -1,38 +1,62 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import { StateService } from '../state.service';
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.scss']
+  styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
-  email: FormControl = new FormControl('', [
-    Validators.required,
-    Validators.email
-  ]);
-  password: FormControl = new FormControl('', [Validators.required]);
+  email: FormControl = new FormControl('', [Validators.required, Validators.email]);
+  password: FormControl = new FormControl('', [Validators.required, Validators.minLength(5)]);
   fname: FormControl = new FormControl('', [Validators.required]);
   lname: FormControl = new FormControl('', [Validators.required]);
   address: FormControl = new FormControl('');
   gender: FormControl = new FormControl('');
   picker: FormControl = new FormControl('');
+  registrationForm;
   hide: boolean = true;
   response;
+  errorLogger = [];
   tooltipMessage: string;
   tooltipDisabled: string = 'true';
   lastrequest: object = {};
 
-  constructor(private stateService: StateService) {}
+  constructor(private stateService: StateService, private formBuilder: FormBuilder) {
+    this.registrationForm = this.formBuilder.group({
+      email: this.email,
+      password: this.password,
+      fname: this.fname,
+      lname: this.lname,
+      address: this.address,
+      gender: this.gender,
+      picker: this.picker,
+    });
+  }
 
-  getErrorMessage() {
-    return this.email.hasError('required')
-      ? 'You must enter a value'
-      : this.email.hasError('email')
-      ? 'Not a valid email'
-      : '';
+  getErrorMessage(inputFieldType) {
+    switch (inputFieldType) {
+      case 'password':
+        return this.password.hasError('required')
+          ? 'You must enter a password'
+          : this.email.hasError('minlength')
+          ? 'length must be more than 5'
+          : '';
+      case 'email':
+        return this.email.hasError('required')
+          ? 'You must enter a value'
+          : this.email.hasError('email')
+          ? 'Not a valid email'
+          : '';
+      case 'fname':
+        return this.fname.hasError('required') ? 'You must enter a value' : '';
+      case 'lname':
+        return this.lname.hasError('required') ? 'You must enter a value' : '';
+      default:
+        return 'Some Error';
+    }
   }
 
   showErrorTooltip(tooltip) {
@@ -42,21 +66,8 @@ export class RegistrationComponent implements OnInit {
   }
 
   async register(tooltip) {
-    const payload = {
-      email: this.email.value,
-      password: this.password.value,
-      fname: this.fname.value,
-      lname: this.lname.value,
-      address: this.address.value,
-      gender: this.gender.value,
-      picker: this.picker.value
-    };
-    const requiered = [
-      payload.fname,
-      payload.lname,
-      payload.password,
-      payload.email
-    ];
+    const payload = this.registrationForm.value;
+    const requiered = [payload.fname, payload.lname, payload.password, payload.email];
 
     if (requiered.some(field => field === '')) {
       this.tooltipMessage = 'Feel all required fields please';
@@ -71,15 +82,11 @@ export class RegistrationComponent implements OnInit {
     }
 
     if (this.response.statusText === 'OK') {
-      this.email.reset();
-      this.password.reset();
-      this.fname.reset();
-      this.lname.reset();
-      this.address.reset();
-      this.gender.reset();
+      this.registrationForm.reset();
       return;
     } else {
-      this.tooltipMessage = `Something went wrong ${this.response.error}`;
+      this.tooltipMessage = 'Something went wrong';
+      this.errorLogger.push(this.response.error);
       this.showErrorTooltip(tooltip);
     }
   }

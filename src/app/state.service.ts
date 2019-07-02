@@ -7,6 +7,11 @@ interface validationResponse {
   data: object;
 }
 
+interface credentials {
+  password: string,
+  email: string
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -20,6 +25,10 @@ export class StateService {
     return Object.entries(newRequest).every(currentArray => {
       return currentArray[1] === oldRequest[currentArray[0]];
     });
+  }
+
+  verifyPayload(data: credentials) {
+    return data.password.length > 5;
   }
 
   verifyCredentials(data: object) {
