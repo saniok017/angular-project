@@ -1,6 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
@@ -33,7 +32,7 @@ import { ShippingComponent } from './shipping/shipping.component';
     ProductDetailsComponent,
     CartComponent,
     ShippingComponent,
-    TopBarComponent,
+    TopBarComponent
   ],
   imports: [
     BrowserModule,
@@ -42,18 +41,18 @@ import { ShippingComponent } from './shipping/shipping.component';
     MyMaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule,
-    RouterModule.forRoot([
-      { path: '', redirectTo: '/', pathMatch: 'full' },
-      { path: 'register', component: RegistrationComponent },
-      { path: 'login', component: LoginComponent },
-      { path: 'main', component: MainComponent },
-      { path: 'products/:productId', component: ProductDetailsComponent },
-      { path: 'cart', component: CartComponent },
-      { path: 'shipping', component: ShippingComponent },
-    ]),
+    FormsModule
+    // RouterModule.forRoot([
+    //   { path: '', redirectTo: '/', pathMatch: 'full' },
+    //   { path: 'register', component: RegistrationComponent },
+    //   { path: 'login', component: LoginComponent },
+    //   { path: 'main', component: MainComponent },
+    //   { path: 'products/:productId', component: ProductDetailsComponent },
+    //   { path: 'cart', component: CartComponent },
+    //   { path: 'shipping', component: ShippingComponent },
+    // ]),
   ],
   providers: [StateService, CartService],
-  bootstrap: [AppComponent],
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

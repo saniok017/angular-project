@@ -6,7 +6,10 @@
     <mat-card *ngFor="let product of products; index as productId">
       <mat-card-header>
         <mat-card-title>
-          <a [title]="product.name + ' details'" [routerLink]="['/products', productId]">
+          <a
+            [title]="product.name + ' details'"
+            [routerLink]="['/shop/products', productId]"
+          >
             {{ product.name }}
           </a>
         </mat-card-title>
