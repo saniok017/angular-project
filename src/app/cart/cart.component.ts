@@ -5,7 +5,7 @@ import { CartService } from '../cart.service';
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
-  styleUrls: ['./cart.component.scss'],
+  styleUrls: ['./cart.component.scss']
 })
 export class CartComponent implements OnInit {
   items;
@@ -13,9 +13,9 @@ export class CartComponent implements OnInit {
   constructor(private cartService: CartService) {
     this.items = this.cartService.getItems();
   }
-  onSubmit(customerData) {
+  onSubmit() {
     // Process checkout data here
-    console.warn('Your order has been submitted', customerData);
+    console.warn('Your order has been submitted');
 
     this.items = this.cartService.clearCart();
   }

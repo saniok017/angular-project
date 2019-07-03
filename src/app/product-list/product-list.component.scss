@@ -1,1 +1,16 @@
+.window {
+  margin: auto;
+  min-width: 400px;
+  max-width: 90vw;
+}
 
+.product-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.mat-card-image {
+  width: 30vw;
+  max-height: 600px;
+}
