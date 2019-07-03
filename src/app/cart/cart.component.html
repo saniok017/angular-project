@@ -10,5 +10,8 @@
       <span>{{ item.name }}</span>
       <span>{{ item.price | currency }}</span>
     </div>
+    <button class="button" mat-flat-button color="primary" (click)="onSubmit()">
+      Purchase
+    </button>
   </mat-card-content>
 </mat-card>

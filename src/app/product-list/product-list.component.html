@@ -2,7 +2,7 @@
   <mat-card-header>
     <mat-card-title>Products</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content class="product-cards">
     <mat-card *ngFor="let product of products; index as productId">
       <mat-card-header>
         <mat-card-title>
@@ -14,6 +14,12 @@
           </a>
         </mat-card-title>
       </mat-card-header>
+      <img
+        class="product-picture"
+        mat-card-image
+        [src]="product.src"
+        alt="Photo of a Product"
+      />
       <mat-card-content>
         <p *ngIf="product.description">
           Description: {{ product.description }}

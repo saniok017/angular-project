@@ -42,15 +42,6 @@ import { ShippingComponent } from './shipping/shipping.component';
     HttpClientModule,
     ReactiveFormsModule,
     FormsModule
-    // RouterModule.forRoot([
-    //   { path: '', redirectTo: '/', pathMatch: 'full' },
-    //   { path: 'register', component: RegistrationComponent },
-    //   { path: 'login', component: LoginComponent },
-    //   { path: 'main', component: MainComponent },
-    //   { path: 'products/:productId', component: ProductDetailsComponent },
-    //   { path: 'cart', component: CartComponent },
-    //   { path: 'shipping', component: ShippingComponent },
-    // ]),
   ],
   providers: [StateService, CartService],
   bootstrap: [AppComponent]
